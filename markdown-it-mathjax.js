@@ -113,7 +113,7 @@
     'display_math': 'DisplayMath'
   }
 
-  return function (options) {
+  return function (md, options) {
     var defaults = {
       beforeMath: '',
       afterMath: '',
@@ -124,17 +124,15 @@
     }
     options = extend(options || {}, defaults)
 
-    return function (md) {
-      md.inline.ruler.before('escape', 'math', math)
-      md.inline.ruler.push('texMath', texMath)
+    md.inline.ruler.before('escape', 'math', math)
+    md.inline.ruler.push('texMath', texMath)
 
-      Object.keys(mapping).forEach(function (key) {
-        var before = options['before' + mapping[key]]
-        var after = options['after' + mapping[key]]
-        md.renderer.rules[key] = function (tokens, idx) {
-          return before + escapeHtml(tokens[idx].content) + after
-        }
-      })
-    }
+    Object.keys(mapping).forEach(function (key) {
+      var before = options['before' + mapping[key]]
+      var after = options['after' + mapping[key]]
+      md.renderer.rules[key] = function (tokens, idx) {
+        return before + escapeHtml(tokens[idx].content) + after
+      }
+    })
   }
 })
